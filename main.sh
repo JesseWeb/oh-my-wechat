@@ -9,15 +9,15 @@ echo_with_date "当前 Oh My WeChat 版本为 v${omw_version}"
 
 # 从 GitHub 获取 owm 版本号
 get_omw_latest_version_from_github() {
-  curl --retry 2 -I -s https://github.com/lmk123/oh-my-wechat/releases/latest | grep -i Location: | sed -n 's/.*\/[vV]\(.*\)/\1/p'
+  curl --retry 2 -s https://api.github.com/repos/lmk123/oh-my-wechat/releases/latest | grep -i Location: | sed -n 's/.*\/[vV]\(.*\)/\1/p'
 }
 
 get_download_url() {
-  echo https://github.com/MustangYM/WeChatExtension-ForMac/archive/v${1}.zip
+  echo https://github.com/MustangYM/WeChatExtension-ForMac/archive/${1}.zip
 }
 
 get_latest_version() {
-  curl --retry 2 -I -s https://github.com/MustangYM/WeChatExtension-ForMac/releases/latest | grep -i Location: | sed -n 's/.*\/[Vv]\(.*\)/\1/p'
+  curl --retry 2 -s https://api.github.com/repos/MustangYM/WeChatExtension-ForMac/releases/latest | sed 's/ //g' | sed -n 's|.*"tag_name":"\([^"]*\)".*|\1|p'
 }
 
 # 保存一下 -n 参数，给 install 方法作为参数用
@@ -80,7 +80,7 @@ download() {
     if [[ -n ${2} ]]; then
       echo_with_date ${2}
     fi
-    echo_with_date "开始下载微信小助手 v${1}……"
+    echo_with_date "开始下载微信小助手 ${1}……"
     # 下载压缩包
     curl --retry 2 -L -o ${1}.zip $(get_download_url $1)
     if [[ 0 -eq $? ]]; then
@@ -263,7 +263,7 @@ install() {
       exit 1
     else
       latest_version=${latest_version//$'\r'/}
-      echo_with_date "微信小助手的最新版本为 v${latest_version}"
+      echo_with_date "微信小助手的最新版本为 ${latest_version}"
     fi
     _version=${latest_version}
   fi
@@ -378,7 +378,7 @@ if [[ $1 == "update" ]]; then
     exit 1
   else
     omw_latest_version=${omw_latest_version//$'\r'/}
-    echo_with_date "Oh My WeChat 的最新版本为 v${omw_latest_version}"
+    echo_with_date "Oh My WeChat 的最新版本为 ${omw_latest_version}"
   fi
   _omw_version=${omw_latest_version}
 

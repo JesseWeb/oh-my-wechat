@@ -19,9 +19,9 @@ fi
 
 echo "开始下载 Oh My WeChat..."
 # 从 GitHub 上下载脚本
-curl --retry 2 -o ${omw_bin_file} https://omw.limingkai.cn/main.sh
+# curl --retry 2 -o ${omw_bin_file} https://omw.limingkai.cn/main.sh
 # 本地开发时直接将文件复制过去
-#cp ./main.sh ${omw_bin_file}
+cp ./main.sh ${omw_bin_file}
 
 if [[ 0 -eq $? ]]; then
   # 给 omw 添加执行权限
